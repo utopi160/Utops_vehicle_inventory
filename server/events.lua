@@ -45,15 +45,25 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
             TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = false }))
         else
             if data[1].inventory == "[]" then
-                TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory,_VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = true }))
+                TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = true }))
             else
                 local dataVehicle = json.decode(data[1].inventory)
-                TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory(dataVehicle))
+                local vehicle = _VehicleInventory(dataVehicle)
+                if vehicle:verifyInventory() then
+                    TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, vehicle)
+                else
+                    _ServerUtils.Notify(source, "~r~Une opération est en cours, merci de patienter.")
+                end
             end
         end
     else
-        TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory.list[plate])
+        if vehicle:verifyInventory() then
+            TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory.list[plate])
+        else
+            _ServerUtils.Notify(source, "~r~Une opération est en cours, merci de patienter.")
+        end
     end
+    _VehicleInventory.list[plate]:verifyInventory()
     PlayersInCarTrunk[source] = plate
 end)
 

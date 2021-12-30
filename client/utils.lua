@@ -15,9 +15,10 @@ _ClientUtils = {}
 function _ClientUtils.GetVehicleInRage()
     local ped = PlayerPedId()
     local coords = GetEntityCoords(ped)
-    local forward = GetOffsetFromEntityInWorldCoords(ped, 0.0, 3.0, 0.0)
+    local forward = GetOffsetFromEntityInWorldCoords(ped, 0.0, Config_Vehicle_Inventory.DistanceAction, 0.0)
     local shapeTestHandle = StartExpensiveSynchronousShapeTestLosProbe(coords, forward, -1, ped, 4)
     local retval ,hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(shapeTestHandle)
+
     return entityHit > 0 and GetEntityType(entityHit) == 2, entityHit
 end
 

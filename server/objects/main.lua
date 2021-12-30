@@ -39,6 +39,43 @@ setmetatable(_VehicleInventory, {
     end
 })
 
+function _VehicleInventory:verifyInventory()
+    if self:getActualWeight() > self:getMaxLimit() then
+        -- Plutôt fier de moi sur ce coup :)
+        repeat
+            if self.items ~= {} then
+                for itemName, _ in pairs(self.items) do
+                    if (self.items[itemName].count - 1 ) > 1 then
+                        self.items[itemName].count = self.items[itemName].count - 1
+                    else
+                        self.items[itemName] = nil
+                    end
+                end
+            end
+            if self.weapons ~= {} then
+                for weaponName, _ in pairs(self.weapons) do
+                    if (self.weapons[weaponName].count - 1 ) > 1 then
+                        self.weapons[weaponName].count = self.weapons[weaponName].count - 1
+                    else
+                        self.weapons[weaponName] = nil
+                    end
+                end
+            end
+            if self.money.cash ~= 0 then
+                if (self.money.cash - 1 ) > 0 then
+                    self.money.cash = self.money.cash - 1
+                end
+            end
+            if self.money.dirty_money ~= 0 then
+                if (self.money.dirty_money - 1 ) > 0 then
+                    self.money.dirty_money = self.money.dirty_money - 1
+                end
+            end
+        until self:getActualWeight() <= self:getMaxLimit()
+    end
+    return true
+end
+
 ---vehicleExist
 ---@param plate string
 ---@public
@@ -46,7 +83,6 @@ setmetatable(_VehicleInventory, {
 function _VehicleInventory.vehicleExist(plate)
     return _VehicleInventory.list[plate]
 end
-
 
 ---registerVehicle
 ---@param plate string
@@ -185,7 +221,7 @@ end
 ---@public
 ---@return void
 function _VehicleInventory:removeCash(amounts)
-    self.money.cash = self.money.cash - math.floor(onumber(amounts))
+    self.money.cash = self.money.cash - math.floor(tonumber(amounts))
 end
 
 ---removeDirtyMoney

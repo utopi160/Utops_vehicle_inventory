@@ -49,6 +49,8 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
             local function CheckMenu()
                 CheckMenuOpen = true
             end
+            local coords = GetEntityCoords(ActualVehicle)
+            DrawMarker(2, coords.x, coords.y, coords.z + 1.3, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5, 255, 255, 255, 170, 0, 1, 2, 0, nil, nil, 0)
             RageUI.IsVisible(RMenu:Get('vehicle_inventory', "main"), true, true, true, function()
                 CheckMenu()
                 RageUI.Separator(("↓ Plaque : ~b~%s~s~ ↓"):format(plate))
@@ -192,10 +194,14 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                 end
             end)
             if _ClientMenu.Open and not CheckMenuOpen then
-                TriggerServerEvent(("%s:CloseMenu"):format(Config_Vehicle_Inventory.EventName), plate)
                 _ClientMenu.Open = false
+                TriggerServerEvent(("%s:CloseMenu"):format(Config_Vehicle_Inventory.EventName), plate)
                 FreezeEntityPosition(PlayerPedId(), false)
+                SetVehicleDoorShut(ActualVehicle, 5, 0)
+                SetVehicleDoorShut(ActualVehicle, 2, 0)
+                SetVehicleDoorShut(ActualVehicle, 3, 0)
                 RMenu:DeleteType("vehicle_inventory")
+                ActualVehicle = nil
             end
             Wait(1)
         end
