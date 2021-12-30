@@ -39,6 +39,9 @@ setmetatable(_VehicleInventory, {
     end
 })
 
+---verifyInventory
+---@public
+---@return boolean
 function _VehicleInventory:verifyInventory()
     if self:getActualWeight() > self:getMaxLimit() then
         -- Plutôt fier de moi sur ce coup :)
