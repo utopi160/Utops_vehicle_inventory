@@ -179,7 +179,7 @@ AddEventHandler(("%s:depositItems"):format(Config_Vehicle_Inventory.EventName), 
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
     local vehicle = _VehicleInventory.list[plate]
-    local number = tonumber(number)
+    local number = math.floor(tonumber(number))
     local label = ESX.GetItemLabel(item)
     local playerInventory = _ServerUtils.formatInventory(source)
 
@@ -267,7 +267,7 @@ AddEventHandler(("%s:TakeCash"):format(Config_Vehicle_Inventory.EventName), func
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
     local vehicle = _VehicleInventory.list[plate]
-    local amount = tonumber(amount)
+    local amount = math.floor(tonumber(amount))
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, "~r~Merci de réessayer.")
@@ -302,7 +302,7 @@ AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.EventName)
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
     local vehicle = _VehicleInventory.list[plate]
-    local amount = tonumber(amount)
+    local amount = math.floor(tonumber(amount))
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, "~r~Merci de réessayer.")
@@ -375,7 +375,7 @@ AddEventHandler(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.EventName), fu
     ---@type _VehicleInventory
     local vehicle = _VehicleInventory.list[plate]
     local weapon = vehicle:getWeapons()
-    local ammo = tonumber(ammo) or 0
+    local ammo = math.floor(tonumber(ammo)) or 0
     local label = ESX.GetWeaponLabel(name)
 
     if PlayersInCarTrunk[source] ~= plate then

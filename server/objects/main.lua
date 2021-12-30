@@ -117,7 +117,7 @@ end
 ---@public
 ---@return void
 function _VehicleInventory:depositCash(amounts)
-    self.money.cash = self.money.cash + tonumber(amounts)
+    self.money.cash = self.money.cash + math.floor(tonumber(amounts))
 end
 
 ---depositDirtyMoney
@@ -125,7 +125,7 @@ end
 ---@public
 ---@return void
 function _VehicleInventory:depositDirtyMoney(amounts)
-    self.money.dirty_money = self.money.dirty_money + tonumber(amounts)
+    self.money.dirty_money = self.money.dirty_money + math.floor(tonumber(amounts))
 end
 
 ---getMaxLimit
@@ -185,7 +185,7 @@ end
 ---@public
 ---@return void
 function _VehicleInventory:removeCash(amounts)
-    self.money.cash = self.money.cash - tonumber(amounts)
+    self.money.cash = self.money.cash - math.floor(onumber(amounts))
 end
 
 ---removeDirtyMoney
@@ -193,7 +193,7 @@ end
 ---@public
 ---@return void
 function _VehicleInventory:removeDirtyMoney(amounts)
-    self.money.dirty_money = self.money.dirty_money - tonumber(amounts)
+    self.money.dirty_money = self.money.dirty_money - math.floor(tonumber(amounts))
 end
 
 ---removeItem
@@ -203,7 +203,7 @@ end
 ---@return void
 function _VehicleInventory:removeItem(name, count)
     if (self.items[name].count - count) > 0 then
-        self.items[name].count = self.items[name].count - tonumber(count)
+        self.items[name].count = self.items[name].count - math.floor(tonumber(count))
     else
         self.items[name] = nil
     end

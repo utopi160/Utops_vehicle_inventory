@@ -6,6 +6,7 @@
     Created at 28/12/2021 10:25
     https://github.com/utopi160
 --]]
+
 RegisterKeyMapping("trunk", "Open Vehicle Inventory", 'keyboard', Config_Vehicle_Inventory.inventoryKey)
 RegisterCommand("trunk", function()
     local vehicle, entity = _ClientUtils.GetVehicleInRage()
