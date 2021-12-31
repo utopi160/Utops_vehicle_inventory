@@ -1,0 +1,1 @@
+ALTER TABLE `owned_vehicles` ADD `inventory` text NOT NULL DEFAULT '[]' AFTER `vehicle`;
