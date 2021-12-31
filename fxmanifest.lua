@@ -4,12 +4,14 @@
     File fxmanifest.lua
     Project Utops_Apartments
     Created at 07/12/2021 18:25
-    https://github.com/utopi160
+    Credit : https://github.com/utopi160
 --]]
 
 fx_version 'adamant'
-
 game 'gta5'
+author 'utopi_160'
+description 'Vehicle trunk system'
+version '1.0.0'
 
 shared_scripts {
     "config.lua",
@@ -52,4 +54,9 @@ server_scripts {
     '@mysql-async/lib/MySQL.lua',
     "server/*.lua",
     "server/objects/main.lua",
+}
+
+exports {
+    'createInventoryAddItem',
+    'removeVehicleInventoryItem',
 }

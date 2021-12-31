@@ -4,12 +4,13 @@
     File menu.lua
     Project Utops_vehicle_inventory
     Created at 28/12/2021 10:26
-    https://github.com/utopi160
+    Credit : https://github.com/utopi160
 --]]
 ---@class _ClientMenu
 _ClientMenu = {}
 _ClientMenu.Open = false
 
+FreezeEntityPosition(PlayerPedId(), false)
 RegisterNetEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName))
 AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), function(plate, playerInventory, vehicle)
     if _ClientMenu.Open then

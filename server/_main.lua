@@ -4,8 +4,9 @@
     File _main.lua
     Project Utops_vehicle_inventory
     Created at 28/12/2021 10:26
-    Source : https://github.com/utopi160
+    Credit : Credit : https://github.com/utopi160
 --]]
+---@type table
 ESX = nil
 TriggerEvent(Config_Vehicle_Inventory.esxGetter, function(obj)
     ESX = obj

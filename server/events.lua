@@ -4,7 +4,7 @@
     File events.lua
     Project Utops_vehicle_inventory
     Created at 28/12/2021 10:30
-    https://github.com/utopi160
+    Credit : https://github.com/utopi160
 --]]
 ---@type table
 PlayersInCarTrunk = {}

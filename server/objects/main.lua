@@ -177,6 +177,7 @@ end
 ---@return number
 function _VehicleInventory:getActualWeight()
     local weight = 0
+
     for _, item in pairs(self.items) do
         weight = item.count * Config_Vehicle_Inventory.Weight.Item
     end
