@@ -1,15 +1,12 @@
 ---@author Gaspard.M.
 ---@version 1.0
 --[[
-    File main.lua
+    File VehicleInventory.lua
     Project Utops_vehicle_inventory
-    Created at 28/12/2021 11:04
-    
-    Copyright (c) Utopia - All Rights Reserved
-    
-    Unauthorized using, copying, modifying and/or distributing of this file,
-    via any medium is strictly prohibited. This code is confidential.
+    Created at 28/12/2021 10:30
+    Credit : https://github.com/utopi160
 --]]
+
 ---@class _VehicleInventory
 ---@field public plate string
 ---@field public model string
@@ -34,11 +31,11 @@ setmetatable(_VehicleInventory, {
         self.money = info.money
         self.weapons = info.weapons
         self.save = info.save
+
         _VehicleInventory.list[self.plate] = self
         return self
     end
 })
-
 
 ---verifyInventory
 ---@public
@@ -88,6 +85,18 @@ function _VehicleInventory:verifyInventory()
                 end
             end
         until self:getActualWeight() <= self:getMaxLimit()
+    end
+    for itemName, _ in pairs(self.items) do
+        local label = ESX.GetItemLabel(itemName)
+        if not label then
+            self.items[itemName] = nil
+        end
+    end
+    for weaponName, _ in pairs(self.weapons) do
+        local label = ESX.GetWeaponLabel(weaponName)
+        if not label then
+            self.weapons[weaponName] = nil
+        end
     end
     return true
 end

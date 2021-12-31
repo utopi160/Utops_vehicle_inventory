@@ -27,6 +27,9 @@ Config_Vehicle_Inventory = {
         ["LSPD"] = true,
     },
     Limit = {
+        Custom = {
+            --[GetHashKey("BLISTA")] = 10,
+        };
         [0] = 50,       --Compact             -3
         [1] = 40,       --Sedan               -3
         [2] = 60,       --SUV                 -4
@@ -49,8 +52,5 @@ Config_Vehicle_Inventory = {
         [19] = 0,       --Military
         [20] = 100,     --Commercial         -5
         [21] = 0,       --Trains
-        Custom = {
-            --[GetHashKey("BLISTA")] = 10,
-        }
     },
 }
