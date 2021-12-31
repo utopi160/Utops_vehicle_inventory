@@ -12,7 +12,7 @@ ActualVehicle = nil
 RegisterKeyMapping("trunk", "Open Vehicle Inventory", 'keyboard', Config_Vehicle_Inventory.inventoryKey)
 RegisterCommand("trunk", function()
     local vehicle, entity = _ClientUtils.GetVehicleInRage()
-    local class, heading = GetVehicleClass(entity), GetEntityHeading(entity)
+    local class, heading, plate = GetVehicleClass(entity), GetEntityHeading(entity),  GetVehicleNumberPlateText(entity)
     if vehicle and not _ClientUtils.Open then
         if GetVehicleDoorLockStatus(entity) ~= 2 then
             ActualVehicle = entity
@@ -24,7 +24,11 @@ RegisterCommand("trunk", function()
             else
                 SetVehicleDoorOpen(entity, 5, 0, 0)
             end
-            TriggerServerEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), GetVehicleNumberPlateText(entity), {class = class, model = GetDisplayNameFromVehicleModel(GetEntityModel(entity))})
+            if Config_Vehicle_Inventory.PlateJob[plate] then
+                local new = ("%s-%d"):format(plate, math.random(1, 900))
+                SetVehicleNumberPlateText(entity, new)
+            end
+            TriggerServerEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName),GetVehicleNumberPlateText(entity), {class = class, model = GetDisplayNameFromVehicleModel(GetEntityModel(entity))})
         else
             _ClientUtils.Notify("~r~Le véhicule est fermé !")
         end

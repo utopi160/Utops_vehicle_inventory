@@ -11,7 +11,7 @@
 Config_Vehicle_Inventory = {
     esxGetter = "esx:getSharedObject",
     inventoryKey = "F1",
-    EventName = GetCurrentResourceName(),
+    EventName = "Utops_vehicle_inventory",
     DistanceAction = 3.0,
     Use3dme = true,
     Menus = {
@@ -22,6 +22,9 @@ Config_Vehicle_Inventory = {
         Item = 1,
         Weapon = 2,
         Money = 1000, -- 50$ / 1000 = weight money
+    },
+    PlateJob = {
+        ["LSPD"] = true,
     },
     Limit = {
         [0] = 50,       --Compact             -3
@@ -47,7 +50,7 @@ Config_Vehicle_Inventory = {
         [20] = 100,     --Commercial         -5
         [21] = 0,       --Trains
         Custom = {
-            [GetHashKey("BLISTA")] = 10,
+            --[GetHashKey("BLISTA")] = 10,
         }
     },
 }

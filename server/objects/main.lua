@@ -39,10 +39,23 @@ setmetatable(_VehicleInventory, {
     end
 })
 
+
 ---verifyInventory
 ---@public
 ---@return boolean
 function _VehicleInventory:verifyInventory()
+    local class = Config_Vehicle_Inventory.Limit[self.class]
+    local limitCustom = Config_Vehicle_Inventory.Limit.Custom[self.class]
+
+    if not limitCustom then
+        if self.limit ~= class then
+            self.limit = class
+        end
+    else
+        if limitCustom ~= self.limit then
+            self.limit = class
+        end
+    end
     if self:getActualWeight() > self:getMaxLimit() then
         -- Plutôt fier de moi sur ce coup :)
         repeat
@@ -79,14 +92,6 @@ function _VehicleInventory:verifyInventory()
     return true
 end
 
----vehicleExist
----@param plate string
----@public
----@return table
-function _VehicleInventory.vehicleExist(plate)
-    return _VehicleInventory.list[plate]
-end
-
 ---registerVehicle
 ---@param plate string
 ---@public
@@ -107,13 +112,6 @@ function _VehicleInventory:hasSaveInventory()
     else
         return true
     end
-end
-
----getInventory
----@public
----@return table
-function _VehicleInventory:getInventory()
-    return self
 end
 
 ---getItems

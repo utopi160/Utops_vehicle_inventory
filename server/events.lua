@@ -38,7 +38,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
         return
     end
     if not vehicle then
-        local data = MySQL.Sync.fetchAll("SELECT * FROM owned_vehicles WHERE plate = @plate", {
+        local data = MySQL.Sync.fetchAll("SELECT inventory FROM owned_vehicles WHERE plate = @plate", {
             ['@plate'] = plate
         })
         if data[1] == nil then
@@ -332,7 +332,7 @@ AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.EventName)
         return
     end
     if (vehicle:getDirtyMoney() - amount) >= 0 then
-        vehicle:removeCash(amount)
+        vehicle:removeDirtyMoney(amount)
         xPlayer.addAccountMoney("black_money", amount)
         _ServerUtils.Notify(source, ("Vous avez retiré ~m~%s~s~ du coffre"):format(amount))
         refreshMenu(source, plate)
@@ -409,7 +409,7 @@ AddEventHandler(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.EventName), fu
         return
     end
     if (weapon[name].ammo - ammo) >= 0 then
-        xPlayer.addWeapon(name)
+        xPlayer.addWeapon(name, ammo)
         vehicle:removeWeapon(name, ammo)
         _ServerUtils.Notify(source, ("Vous avez retiré ~b~%s~s~ avec ~o~%d~s~ munitions"):format(label, ammo))
         refreshMenu(source, plate)

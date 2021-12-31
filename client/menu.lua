@@ -10,8 +10,6 @@
 _ClientMenu = {}
 _ClientMenu.Open = false
 
-FreezeEntityPosition(PlayerPedId(), false)
-
 RegisterNetEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName))
 AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), function(plate, playerInventory, vehicle)
     if _ClientMenu.Open then
@@ -55,8 +53,10 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                 CheckMenu()
                 RageUI.Separator(("↓ Plaque : ~b~%s~s~ ↓"):format(plate))
                 RageUI.Separator(("Contenu: ~y~%s/~y~%d"):format(getActualWeight(), vehicle.limit))
+
                 RageUI.ButtonWithStyle(("Votre inventaire - (~o~%s~s~)"):format(_ClientUtils.GetNumberInTheTable(playerInventory.items) + #playerInventory.weapons), nil, {RightLabel = "→→"}, true, function(Hovered, Active, Selected)
                 end, RMenu:Get('vehicle_inventory', "player_inventory"))
+
                 RageUI.ButtonWithStyle(("Le coffre - (~o~%s~s~)"):format(_ClientUtils.GetNumberInTheTable(vehicle.items) + _ClientUtils.GetNumberInTheTable(vehicle.weapons)), nil, {RightLabel = "→→"}, true, function(Hovered, Active, Selected)
                 end, RMenu:Get('vehicle_inventory', "vehicle_inventory"))
             end)
@@ -161,16 +161,18 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                 local countItems = 0
                 for itemName, itemInfo in pairs(playerInventory.items) do
                     countItems = countItems + 1
-                    RageUI.ButtonWithStyle(("[~b~%d~s~] - %s"):format(itemInfo.count, itemInfo.label), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
-                        if Selected then
-                            local number = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'items à retirer", "", 10)))
-                            if number ~= nil and number > 0 and number <= itemInfo.count then
-                                TriggerServerEvent(("%s:depositItems"):format(Config_Vehicle_Inventory.EventName), plate, itemName, number)
-                            else
-                                _ClientUtils.Notify("~r~La somme est inexact.")
+                    if itemInfo.count > 0 then
+                        RageUI.ButtonWithStyle(("[~b~%d~s~] - %s"):format(itemInfo.count, itemInfo.label), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
+                            if Selected then
+                                local number = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'items à retirer", "", 10)))
+                                if number ~= nil and number > 0 and number <= itemInfo.count then
+                                    TriggerServerEvent(("%s:depositItems"):format(Config_Vehicle_Inventory.EventName), plate, itemName, number)
+                                else
+                                    _ClientUtils.Notify("~r~La somme est inexact.")
+                                end
                             end
-                        end
-                    end)
+                        end)
+                    end
                 end
                 if countItems == 0 then
                     RageUI.Separator("")
