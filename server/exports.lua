@@ -27,6 +27,7 @@ function createVehicleInventoryAddItem(plate, model, class, item)
                 vehicle:depositItem(item.name, item.count)
             end
         end
+        _LogsManagers:registerLogs()
     end
 end
 

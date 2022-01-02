@@ -11,8 +11,8 @@ _ClientMenu = {}
 _ClientMenu.Open = false
 
 FreezeEntityPosition(PlayerPedId(), false)
-RegisterNetEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), function(plate, playerInventory, vehicle)
+RegisterNetEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), function(plate, playerInventory, vehicle)
     if _ClientMenu.Open then
         _ClientMenu.Open = false
         Wait(2)
@@ -69,7 +69,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                     if Selected then
                         local amount = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10)))
                         if amount ~= nil and amount > 0 and amount <= vehicle.money.cash then
-                            TriggerServerEvent(("%s:TakeCash"):format(Config_Vehicle_Inventory.EventName), plate, amount)
+                            TriggerServerEvent(("%s:TakeCash"):format(Config_Vehicle_Inventory.eventName), plate, amount)
                         else
                             _ClientUtils.Notify("~r~La somme est inexact.")
                         end
@@ -79,7 +79,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                     if Selected then
                         local amount = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10)))
                         if amount ~= nil and amount > 0 and amount <= vehicle.money.dirty_money then
-                            TriggerServerEvent(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.EventName), plate, amount)
+                            TriggerServerEvent(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.eventName), plate, amount)
                         else
                             _ClientUtils.Notify("~r~La somme est inexact.")
                         end
@@ -93,7 +93,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                         if Selected then
                             local number = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'items à retirer", "", 10)))
                             if number ~= nil and number > 0 and number <= itemInfo.count then
-                                TriggerServerEvent(("%s:TakeItems"):format(Config_Vehicle_Inventory.EventName), plate, itemName, number)
+                                TriggerServerEvent(("%s:TakeItems"):format(Config_Vehicle_Inventory.eventName), plate, itemName, number)
                             else
                                 _ClientUtils.Notify("~r~La somme est inexact.")
                             end
@@ -129,7 +129,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                     if ammo <= Weapon.Selected.ammo then
                         RageUI.ButtonWithStyle(("Prendre l'arme avec ~o~%s~s~ munitions"):format(ammo), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
                             if Selected then
-                                TriggerServerEvent(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.EventName), plate, Weapon.Selected.name, ammo)
+                                TriggerServerEvent(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.eventName), plate, Weapon.Selected.name, ammo)
                             end
                         end)
                     end
@@ -142,7 +142,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                     if Selected then
                         local amount = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10)))
                         if amount ~= nil and amount > 0 and amount <= playerInventory.cash then
-                            TriggerServerEvent(("%s:depositCash"):format(Config_Vehicle_Inventory.EventName), plate, amount)
+                            TriggerServerEvent(("%s:depositCash"):format(Config_Vehicle_Inventory.eventName), plate, amount)
                         else
                             _ClientUtils.Notify("~r~La somme est inexact.")
                         end
@@ -152,7 +152,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                     if Selected then
                         local amount = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10)))
                         if amount ~= nil and amount > 0 and amount <= playerInventory.dirty_money then
-                            TriggerServerEvent(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.EventName), plate, amount)
+                            TriggerServerEvent(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.eventName), plate, amount)
                         else
                             _ClientUtils.Notify("~r~La somme est inexact.")
                         end
@@ -167,7 +167,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                             if Selected then
                                 local number = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'items à retirer", "", 10)))
                                 if number ~= nil and number > 0 and number <= itemInfo.count then
-                                    TriggerServerEvent(("%s:depositItems"):format(Config_Vehicle_Inventory.EventName), plate, itemName, number)
+                                    TriggerServerEvent(("%s:depositItems"):format(Config_Vehicle_Inventory.eventName), plate, itemName, number)
                                 else
                                     _ClientUtils.Notify("~r~La somme est inexact.")
                                 end
@@ -186,7 +186,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
                     countWeapons = countWeapons + 1
                     RageUI.ButtonWithStyle(("[~r~%d~s~] - %s"):format(weaponInfo.ammo or 0, weaponInfo.label), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
                         if Selected then
-                            TriggerServerEvent(("%s:depositWeapon"):format(Config_Vehicle_Inventory.EventName), plate, weaponInfo.name, weaponInfo.ammo)
+                            TriggerServerEvent(("%s:depositWeapon"):format(Config_Vehicle_Inventory.eventName), plate, weaponInfo.name, weaponInfo.ammo)
                         end
                     end)
                 end
@@ -198,16 +198,20 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
             end)
             if _ClientMenu.Open and not CheckMenuOpen then
                 _ClientMenu.Open = false
-                TriggerServerEvent(("%s:CloseMenu"):format(Config_Vehicle_Inventory.EventName), plate)
+                if Config_Vehicle_Inventory.use3dme then
+                    ExecuteCommand("me Ferme le coffre")
+                end
+                TriggerServerEvent(("%s:CloseMenu"):format(Config_Vehicle_Inventory.eventName), plate)
                 FreezeEntityPosition(PlayerPedId(), false)
-                SetVehicleDoorShut(ActualVehicle, 5, 0)
-                SetVehicleDoorShut(ActualVehicle, 2, 0)
-                SetVehicleDoorShut(ActualVehicle, 3, 0)
+                SetVehicleDoorShut(actualVehicle, 5, 0)
+                SetVehicleDoorShut(actualVehicle, 2, 0)
+                SetVehicleDoorShut(actualVehicle, 3, 0)
                 RMenu:DeleteType("vehicle_inventory")
-                ActualVehicle = nil
+                actualVehicle = nil
             end
             Wait(1)
         end
     end)
 end)
+
 

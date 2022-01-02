@@ -14,11 +14,11 @@ local function refreshMenu(source, plate)
     local xPlayer = ESX.GetPlayerFromId(source)
     local playerInventory = {cash = xPlayer.getMoney(), dirty_money = xPlayer.getAccount("black_money").money, items = _ServerUtils.formatInventory(source), weapons = xPlayer.getLoadout()}
 
-    TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory.list[plate])
+    TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), source, plate, playerInventory, _VehicleInventory.list[plate])
 end
 
-RegisterNetEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), function(plate, info)
+RegisterNetEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), function(plate, info)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -26,15 +26,15 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
     local playerInventory = {cash = xPlayer.getMoney(), dirty_money = xPlayer.getAccount("black_money").money, items = _ServerUtils.formatInventory(source), weapons = xPlayer.getLoadout()}
 
     if PlayersInCarTrunk[source] then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if info.class == nil and not Config_Vehicle_Inventory.Limit[info.class] and info.model == nil then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
@@ -42,15 +42,15 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
             ['@plate'] = plate
         })
         if data[1] == nil then
-            TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = false }))
+            TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), source, plate, playerInventory, _VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = false }))
         else
             if data[1].inventory == "[]" then
-                TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = true }))
+                TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), source, plate, playerInventory, _VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = true }))
             else
                 local dataVehicle = json.decode(data[1].inventory)
                 local vehicle = _VehicleInventory(dataVehicle)
                 if vehicle:verifyInventory() then
-                    TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, vehicle)
+                    TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), source, plate, playerInventory, vehicle)
                 else
                     _ServerUtils.Notify(source, "~r~Une opération est en cours, merci de patienter.")
                 end
@@ -58,32 +58,34 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), func
         end
     else
         if vehicle:verifyInventory() then
-            TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName), source, plate, playerInventory, _VehicleInventory.list[plate])
+            TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), source, plate, playerInventory, _VehicleInventory.list[plate])
         else
             _ServerUtils.Notify(source, "~r~Une opération est en cours, merci de patienter.")
         end
     end
     _VehicleInventory.list[plate]:verifyInventory()
     PlayersInCarTrunk[source] = plate
+    _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["open"].title, message = (_GenericMessages.logs.messages["open"].message):format(source, xPlayer.identifier, plate), color = _GenericMessages.logs.messages["open"].color})
 end)
 
-RegisterNetEvent(("%s:CloseMenu"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:CloseMenu"):format(Config_Vehicle_Inventory.EventName), function(plate)
+RegisterNetEvent(("%s:CloseMenu"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:CloseMenu"):format(Config_Vehicle_Inventory.eventName), function(plate)
     local source = source
+    local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
     local vehicle = _VehicleInventory.list[plate]
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if vehicle:hasSaveInventory() then
@@ -94,11 +96,12 @@ AddEventHandler(("%s:CloseMenu"):format(Config_Vehicle_Inventory.EventName), fun
     end
     if PlayersInCarTrunk[source] == plate then
         PlayersInCarTrunk[source] = nil
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["close"].title, message = (_GenericMessages.logs.messages["close"].message):format(source, xPlayer.identifier, plate), color = _GenericMessages.logs.messages["close"].color})
     end
 end)
 
-RegisterNetEvent(("%s:depositCash"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:depositCash"):format(Config_Vehicle_Inventory.EventName), function(plate, amount)
+RegisterNetEvent(("%s:depositCash"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:depositCash"):format(Config_Vehicle_Inventory.eventName), function(plate, amount)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -106,20 +109,20 @@ AddEventHandler(("%s:depositCash"):format(Config_Vehicle_Inventory.EventName), f
     local amount = math.floor(tonumber(amount))
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if amount == nil or amount < 0 and type(amount) ~= "number" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if vehicle:getActualWeight() >= vehicle:getMaxLimit() then
@@ -132,6 +135,7 @@ AddEventHandler(("%s:depositCash"):format(Config_Vehicle_Inventory.EventName), f
             vehicle:depositCash(amount)
             _ServerUtils.Notify(source, ("Vous venez de poser ~g~%s$~s~ dans le coffre."):format(amount))
             refreshMenu(source, plate)
+            _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["deposit_cash"].title, message = (_GenericMessages.logs.messages["deposit_cash"].message):format(source, xPlayer.identifier, amount, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["deposit_cash"].color})
         else
             _ServerUtils.Notify(source, "~r~Vous n'avez pas assez d'argent.")
         end
@@ -140,8 +144,8 @@ AddEventHandler(("%s:depositCash"):format(Config_Vehicle_Inventory.EventName), f
     end
 end)
 
-RegisterNetEvent(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.EventName), function(plate, amount)
+RegisterNetEvent(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.eventName), function(plate, amount)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -149,20 +153,20 @@ AddEventHandler(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.EventNa
     local amount = math.floor(tonumber(amount))
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if amount < 0 and type(amount) ~= "number" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if vehicle:getActualWeight() >= vehicle:getMaxLimit() then
@@ -175,6 +179,7 @@ AddEventHandler(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.EventNa
             vehicle:depositDirtyMoney(amount)
             _ServerUtils.Notify(source, ("Vous venez de poser ~g~%s$~s~ dans le coffre."):format(amount))
             refreshMenu(source, plate)
+            _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["deposit_cash"].title, message = (_GenericMessages.logs.messages["deposit_cash"].message):format(source, xPlayer.identifier, amount, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["deposit_cash"].color})
         else
             _ServerUtils.Notify(source, "~r~Vous n'avez pas assez d'argent.")
         end
@@ -183,8 +188,8 @@ AddEventHandler(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.EventNa
     end
 end)
 
-RegisterNetEvent(("%s:depositItems"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:depositItems"):format(Config_Vehicle_Inventory.EventName), function(plate, item, number)
+RegisterNetEvent(("%s:depositItems"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:depositItems"):format(Config_Vehicle_Inventory.eventName), function(plate, item, number)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -194,19 +199,20 @@ AddEventHandler(("%s:depositItems"):format(Config_Vehicle_Inventory.EventName), 
     local playerInventory = _ServerUtils.formatInventory(source)
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not label or number < 0 or type(number) ~= "number" then
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if vehicle:getActualWeight() >= vehicle:getMaxLimit() then
@@ -226,13 +232,14 @@ AddEventHandler(("%s:depositItems"):format(Config_Vehicle_Inventory.EventName), 
         vehicle:depositItem(item, number)
         _ServerUtils.Notify(source, ("Vous avez déposé ~o~%s~s~ %s dans le coffre"):format(number, label))
         refreshMenu(source, plate)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["deposit_items"].title, message = (_GenericMessages.logs.messages["deposit_items"].message):format(source, xPlayer.identifier, number, item, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["deposit_items"].color})
     else
         _ServerUtils.Notify(source, "~r~Plus de place dans le coffre.")
     end
 end)
 
-RegisterNetEvent(("%s:depositWeapon"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:depositWeapon"):format(Config_Vehicle_Inventory.EventName), function(plate, weaponName, ammo)
+RegisterNetEvent(("%s:depositWeapon"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:depositWeapon"):format(Config_Vehicle_Inventory.eventName), function(plate, weaponName, ammo)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -241,20 +248,20 @@ AddEventHandler(("%s:depositWeapon"):format(Config_Vehicle_Inventory.EventName),
     local label = ESX.GetWeaponLabel(weaponName)
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not label or ammo < 0 or type(ammo) ~= "number" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if vehicle:getActualWeight() >= vehicle:getMaxLimit() then
@@ -266,13 +273,14 @@ AddEventHandler(("%s:depositWeapon"):format(Config_Vehicle_Inventory.EventName),
         vehicle:depositWeapon(weaponName, ammo)
         _ServerUtils.Notify(source, ("Vous avez déposé %s dans le coffre."):format(label))
         refreshMenu(source, plate)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["deposit_weapons"].title, message = (_GenericMessages.logs.messages["deposit_weapons"].message):format(source, xPlayer.identifier, weaponName, ammo, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["deposit_weapons"].color})
     else
         _ServerUtils.Notify(source, "~r~Plus de place dans le coffre.")
     end
 end)
 
-RegisterNetEvent(("%s:TakeCash"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:TakeCash"):format(Config_Vehicle_Inventory.EventName), function(plate, amount)
+RegisterNetEvent(("%s:TakeCash"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:TakeCash"):format(Config_Vehicle_Inventory.eventName), function(plate, amount)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -280,16 +288,16 @@ AddEventHandler(("%s:TakeCash"):format(Config_Vehicle_Inventory.EventName), func
     local amount = math.floor(tonumber(amount))
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if amount <= 0 or type(amount) ~= "number" then
@@ -301,13 +309,14 @@ AddEventHandler(("%s:TakeCash"):format(Config_Vehicle_Inventory.EventName), func
         xPlayer.addMoney(amount)
         _ServerUtils.Notify(source, ("Vous avez retiré ~g~%s~s~ du coffre"):format(amount))
         refreshMenu(source, plate)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["remove_cash"].title, message = (_GenericMessages.logs.messages["remove_cash"].message):format(source, xPlayer.identifier, amount, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["remove_cash"].color})
     else
         _ServerUtils.Notify(source, "~r~Vous ne pouvez pas retirer autant.")
     end
 end)
 
-RegisterNetEvent(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.EventName), function(plate, amount)
+RegisterNetEvent(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.eventName), function(plate, amount)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -315,16 +324,16 @@ AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.EventName)
     local amount = math.floor(tonumber(amount))
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if amount <= 0 or type(amount) ~= "number" then
@@ -336,13 +345,14 @@ AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.EventName)
         xPlayer.addAccountMoney("black_money", amount)
         _ServerUtils.Notify(source, ("Vous avez retiré ~m~%s~s~ du coffre"):format(amount))
         refreshMenu(source, plate)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["remove_dirty"].title, message = (_GenericMessages.logs.messages["remove_dirty"].message):format(source, xPlayer.identifier, amount, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["remove_dirty"].color})
     else
         _ServerUtils.Notify(source, "~r~Vous ne pouvez pas retirer autant.")
     end
 end)
 
-RegisterNetEvent(("%s:TakeItems"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:TakeItems"):format(Config_Vehicle_Inventory.EventName), function(plate, itemName, number)
+RegisterNetEvent(("%s:TakeItems"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:TakeItems"):format(Config_Vehicle_Inventory.eventName), function(plate, itemName, number)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -352,16 +362,16 @@ AddEventHandler(("%s:TakeItems"):format(Config_Vehicle_Inventory.EventName), fun
     local label = ESX.GetItemLabel(itemName)
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not label or number <= 0 or type(number) ~= "number" then
@@ -373,13 +383,14 @@ AddEventHandler(("%s:TakeItems"):format(Config_Vehicle_Inventory.EventName), fun
         xPlayer.addInventoryItem(itemName, number)
         _ServerUtils.Notify(source, ("Vous avez retiré ~o~%s~s~ %s dans le coffre"):format(number, label))
         refreshMenu(source, plate)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["remove_items"].title, message = (_GenericMessages.logs.messages["remove_items"].message):format(source, xPlayer.identifier, number, itemName, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["remove_items"].color})
     else
         _ServerUtils.Notify(source, "~r~Pas assez d'items dans le coffre.")
     end
 end)
 
-RegisterNetEvent(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.EventName))
-AddEventHandler(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.EventName), function(plate, name, ammo)
+RegisterNetEvent(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.eventName))
+AddEventHandler(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.eventName), function(plate, name, ammo)
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     ---@type _VehicleInventory
@@ -389,19 +400,20 @@ AddEventHandler(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.EventName), fu
     local label = ESX.GetWeaponLabel(name)
 
     if PlayersInCarTrunk[source] ~= plate then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if plate == nil or type(plate) ~= "string" then
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not vehicle then
         _VehicleInventory.registerVehicle(plate)
-        _ServerUtils.Notify(source, "~r~Merci de réessayer.")
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not label or type(ammo) ~= "number" then
+        _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
     if not weapon[name] then
@@ -413,8 +425,11 @@ AddEventHandler(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.EventName), fu
         vehicle:removeWeapon(name, ammo)
         _ServerUtils.Notify(source, ("Vous avez retiré ~b~%s~s~ avec ~o~%d~s~ munitions"):format(label, ammo))
         refreshMenu(source, plate)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["remove_weapons"].title, message = (_GenericMessages.logs.messages["remove_weapons"].message):format(source, xPlayer.identifier, name, ammo, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["remove_weapons"].color})
     else
         _ServerUtils.Notify(source, "~r~Il n'y a pas assez de munition dans le coffre.")
         return
     end
 end)
+
+

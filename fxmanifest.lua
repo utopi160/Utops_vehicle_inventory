@@ -52,8 +52,8 @@ client_scripts {
 
 server_scripts {
     '@mysql-async/lib/MySQL.lua',
+    "server/objects/VehicleInventory.lua",
     "server/*.lua",
-    "server/objects/main.lua",
 }
 
 exports {

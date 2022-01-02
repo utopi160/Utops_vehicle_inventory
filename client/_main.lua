@@ -7,7 +7,7 @@
     Credit : https://github.com/utopi160
 --]]
 ---@type number
-ActualVehicle = nil
+actualVehicle = nil
 
 RegisterKeyMapping("trunk", "Open Vehicle Inventory", 'keyboard', Config_Vehicle_Inventory.inventoryKey)
 RegisterCommand("trunk", function()
@@ -15,7 +15,7 @@ RegisterCommand("trunk", function()
     local class, heading, plate = GetVehicleClass(entity), GetEntityHeading(entity),  GetVehicleNumberPlateText(entity)
     if vehicle and not _ClientUtils.Open then
         if GetVehicleDoorLockStatus(entity) ~= 2 then
-            ActualVehicle = entity
+            actualVehicle = entity
             SetEntityHeading(PlayerPedId(), heading)
             if class == 12 or class == 17 or class == 19 or class == 20 then
                 SetVehicleDoorOpen(entity, 2, 0, 0)
@@ -28,7 +28,10 @@ RegisterCommand("trunk", function()
                 local new = ("%s-%d"):format(plate, math.random(1, 900))
                 SetVehicleNumberPlateText(entity, new)
             end
-            TriggerServerEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.EventName),GetVehicleNumberPlateText(entity), {class = class, model = GetDisplayNameFromVehicleModel(GetEntityModel(entity))})
+            if Config_Vehicle_Inventory.use3dme then
+                ExecuteCommand("me Ouvre le coffre")
+            end
+            TriggerServerEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName),GetVehicleNumberPlateText(entity), {class = class, model = GetDisplayNameFromVehicleModel(GetEntityModel(entity))})
         else
             _ClientUtils.Notify("~r~Le véhicule est fermé !")
         end

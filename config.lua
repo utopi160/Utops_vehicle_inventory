@@ -11,12 +11,15 @@
 Config_Vehicle_Inventory = {
     esxGetter = "esx:getSharedObject",
     inventoryKey = "F1",
-    EventName = "Utops_vehicle_inventory",
-    DistanceAction = 3.0,
-    Use3dme = true,
+    eventName = "Utops_vehicle_inventory",
+    distanceAction = 3.0,
+    use3dme = true,
     Menus = {
         Title = "Coffre",
         Subtitle = "Votre Coffre",
+    },
+    Logs = {
+        discordWebhook = "https://discord.com/api/webhooks/926869506536636426/fQAeVgfZJNFcpWfHRTRt3pS0WxBHmY0Utnu1svWqX0UqOtuImXtS-ZdJFkkaoOVo-qsv",
     },
     Weight = {
         Item = 1,
