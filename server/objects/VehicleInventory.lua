@@ -54,7 +54,6 @@ function _VehicleInventory:verifyInventory()
         end
     end
     if self:getActualWeight() > self:getMaxLimit() then
-        -- Plutôt fier de moi sur ce coup :)
         repeat
             if self.items ~= {} then
                 for itemName, _ in pairs(self.items) do
