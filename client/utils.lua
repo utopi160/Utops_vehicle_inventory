@@ -28,7 +28,7 @@ end
 ---@return void
 function _ClientUtils.Notify(msg)
     SetNotificationTextEntry('STRING')
-    AddTextComponentString(("~g~<C>Coffre</C>~s~:\n%s"):format(msg))
+    AddTextComponentString(("~g~<C>Coffre</C>~s~ :\n%s"):format(msg))
     DrawNotification(0,1)
 end
 

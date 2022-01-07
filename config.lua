@@ -10,16 +10,16 @@
 ---@class Config_Vehicle_Inventory
 Config_Vehicle_Inventory = {
     esxGetter = "esx:getSharedObject",
-    inventoryKey = "F1",
+    inventoryKey = "L",
     eventName = "Utops_vehicle_inventory",
     distanceAction = 3.0,
-    use3dme = true,
+    use3dme = false, -- or true
     Menus = {
         Title = "Coffre",
         Subtitle = "Votre Coffre",
     },
     Logs = {
-        discordWebhook = "https://discord.com/api/webhooks/926869506536636426/fQAeVgfZJNFcpWfHRTRt3pS0WxBHmY0Utnu1svWqX0UqOtuImXtS-ZdJFkkaoOVo-qsv",
+        discordWebhook = "https://discord.com/api/webhooks/929059027957190726/11gwQZF8hWtX-mKICBubNQsg0X5tNR40P1LPUKetOI-IVxtVBorXoDYf89-m-vGDS-5E",
     },
     Weight = {
         Item = 1,
@@ -32,7 +32,7 @@ Config_Vehicle_Inventory = {
     Limit = {
         Custom = {
             --[GetHashKey("BLISTA")] = 10,
-        };
+        },
         [0] = 50,       --Compact             -3
         [1] = 40,       --Sedan               -3
         [2] = 60,       --SUV                 -4

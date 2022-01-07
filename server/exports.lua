@@ -6,13 +6,14 @@
     Created at 31/12/2021 14:50
     Credit : https://github.com/utopi160
 --]]
+-- Voici un example, à vous de jouer pour rendre cette "librairie" plus complète !
 
 --[[
     plate = Vehicle plate (string)
     model = Vehicle name (string)
     class = Vehicle class (number)
     item = Add item (table)
-    example = createInventoryAddItem("HD 456", "sultan", 10, {name = "bread", count = 10})
+    example = exports.Utops_vehicle_inventory:createInventoryAddItem("HD 456", "sultan", 10, {name = "bread", count = 10})
 ]]--
 function createVehicleInventoryAddItem(plate, model, class, item)
     if plate ~= nil and type(plate) == "string" and model ~= nil and type(model) == "string" and class ~= nil and type(class) == "number" and Config_Vehicle_Inventory.Limit[class] and item ~= nil and item ~= {} and type(item) == "table" then
@@ -34,7 +35,7 @@ end
 --[[
     plate = Vehicle plate (string)
     item = Add item (table)
-    example = createInventoryAddItem("HD 456", {name = "bread", count = 10})
+    example = exports.Utops_vehicle_inventory:createInventoryAddItem("HD 456", {name = "bread", count = 10})
 ]]--
 function removeVehicleInventoryItem(plate, item)
     if plate ~= nil and type(plate) == "string" and item ~= nil and item ~= {} and type(item) == "table" then

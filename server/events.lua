@@ -122,7 +122,7 @@ AddEventHandler(("%s:depositCash"):format(Config_Vehicle_Inventory.eventName), f
         return
     end
     if amount == nil or amount < 0 and type(amount) ~= "number" then
-        _ServerUtils.Notify(source, _GenericMessages.errors)
+        _ServerUtils.Notify(source, "~r~La somme est inexact.")
         return
     end
     if vehicle:getActualWeight() >= vehicle:getMaxLimit() then
@@ -166,7 +166,7 @@ AddEventHandler(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.eventNa
         return
     end
     if amount < 0 and type(amount) ~= "number" then
-        _ServerUtils.Notify(source, _GenericMessages.errors)
+        _ServerUtils.Notify(source, "~r~La somme est inexact.")
         return
     end
     if vehicle:getActualWeight() >= vehicle:getMaxLimit() then
@@ -300,7 +300,7 @@ AddEventHandler(("%s:TakeCash"):format(Config_Vehicle_Inventory.eventName), func
         _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
-    if amount <= 0 or type(amount) ~= "number" then
+    if amount < 0 or type(amount) ~= "number" then
         _ServerUtils.Notify(source, "~r~La somme est inexact.")
         return
     end
@@ -336,7 +336,7 @@ AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.eventName)
         _ServerUtils.Notify(source, _GenericMessages.errors)
         return
     end
-    if amount <= 0 or type(amount) ~= "number" then
+    if amount < 0 or type(amount) ~= "number" then
         _ServerUtils.Notify(source, "~r~La somme est inexact.")
         return
     end
@@ -431,5 +431,4 @@ AddEventHandler(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.eventName), fu
         return
     end
 end)
-
 

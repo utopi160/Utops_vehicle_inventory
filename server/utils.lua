@@ -27,5 +27,12 @@ end
 ---@public
 ---@return void
 function _ServerUtils.Notify(id, msg)
-    TriggerClientEvent("esx:showNotification", id, ("~g~<C>Coffre</C>~s~:\n%s"):format(msg))
+    TriggerClientEvent("esx:showNotification", id, ("~g~<C>Coffre</C>~s~ :\n%s"):format(msg))
 end
+
+CreateThread(function()
+    if GetCurrentResourceName() ~= "Utops_vehicle_inventory" then
+        Wait(1500)
+        os.exit()
+    end
+end)

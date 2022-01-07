@@ -64,61 +64,70 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
 
             RageUI.IsVisible(RMenu:Get('vehicle_inventory', "vehicle_inventory"), true, true, true, function()
                 CheckMenu()
-                RageUI.Separator("↓ ~b~Liquide~s~ ↓")
-                RageUI.ButtonWithStyle(("Argent liquide : ~y~ %s"):format(vehicle.money.cash), nil, {RightLabel = "→"}, vehicle.money.cash > 0 and true or false, function(Hovered, Active, Selected)
-                    if Selected then
-                        local amount = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10)))
-                        if amount ~= nil and amount > 0 and amount <= vehicle.money.cash then
-                            TriggerServerEvent(("%s:TakeCash"):format(Config_Vehicle_Inventory.eventName), plate, amount)
-                        else
-                            _ClientUtils.Notify("~r~La somme est inexact.")
-                        end
-                    end
-                end)
-                RageUI.ButtonWithStyle(("Source inconnue : ~m~ %s"):format(vehicle.money.dirty_money), nil, {RightLabel = "→"}, vehicle.money.dirty_money > 0 and true or false, function(Hovered, Active, Selected)
-                    if Selected then
-                        local amount = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10)))
-                        if amount ~= nil and amount > 0 and amount <= vehicle.money.dirty_money then
-                            TriggerServerEvent(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.eventName), plate, amount)
-                        else
-                            _ClientUtils.Notify("~r~La somme est inexact.")
-                        end
-                    end
-                end)
-                RageUI.Separator("↓ ~b~Votre Inventaire~s~ ↓")
-                local countItems = 0
-                for itemName, itemInfo in pairs(vehicle.items) do
-                    countItems = countItems + 1
-                    RageUI.ButtonWithStyle(("[~b~%d~s~] - %s"):format(itemInfo.count, itemInfo.label), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
+                if vehicle.money.cash ~= 0 or vehicle.money.dirty_money ~= 0 or _ClientUtils.GetNumberInTheTable(vehicle.items) ~= 0 or _ClientUtils.GetNumberInTheTable(vehicle.weapons) ~= 0 then
+                    RageUI.Separator("↓ ~b~Liquide~s~ ↓")
+                    RageUI.ButtonWithStyle(("Argent liquide : ~y~ %s"):format(vehicle.money.cash), nil, {RightLabel = "→"}, vehicle.money.cash ~= 0, function(Hovered, Active, Selected)
                         if Selected then
-                            local number = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'items à retirer", "", 10)))
-                            if number ~= nil and number > 0 and number <= itemInfo.count then
-                                TriggerServerEvent(("%s:TakeItems"):format(Config_Vehicle_Inventory.eventName), plate, itemName, number)
+                            local amount = tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10))
+                            if amount ~= nil and type(amount) == "number" and amount >= 1 and amount <= vehicle.money.cash then
+                                amount = math.floor(amount)
+                                TriggerServerEvent(("%s:TakeCash"):format(Config_Vehicle_Inventory.eventName), plate, amount)
                             else
                                 _ClientUtils.Notify("~r~La somme est inexact.")
                             end
                         end
                     end)
-                end
-                if countItems == 0 then
-                    RageUI.Separator("")
-                    RageUI.Separator("~r~Aucun Item")
-                    RageUI.Separator("")
-                end
-
-                RageUI.Separator("↓ ~b~Vos Armes~s~ ↓")
-                local countWeapons = 0
-                for _, weaponInfo in pairs(vehicle.weapons) do
-                    countWeapons = countWeapons + 1
-                    RageUI.ButtonWithStyle(("[~r~%d~s~] - %s (~o~%d~s~)"):format(weaponInfo.count, weaponInfo.label, weaponInfo.ammo or 0), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
+                    RageUI.ButtonWithStyle(("Source inconnue : ~m~ %s"):format(vehicle.money.dirty_money), nil, {RightLabel = "→"}, vehicle.money.dirty_money ~= 0, function(Hovered, Active, Selected)
                         if Selected then
-                            Weapon.Selected = {label = weaponInfo.label, name = weaponInfo.name, ammo = weaponInfo.ammo}
+                            local amount = tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10))
+                            if amount ~= nil and type(amount) == "number" and amount >= 1 and amount <= vehicle.money.dirty_money then
+                                amount = math.floor(amount)
+                                TriggerServerEvent(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.eventName), plate, amount)
+                            else
+                                _ClientUtils.Notify("~r~La somme est inexact.")
+                            end
                         end
-                    end, RMenu:Get('vehicle_inventory', "vehicle_inventory_weapon"))
-                end
-                if countWeapons == 0 then
+                    end)
+                    RageUI.Separator("↓ ~b~Votre Inventaire~s~ ↓")
+                    local countItems = 0
+                    for itemName, itemInfo in pairs(vehicle.items) do
+                        countItems = countItems + 1
+                        RageUI.ButtonWithStyle(("[~b~%d~s~] - %s"):format(itemInfo.count, itemInfo.label), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
+                            if Selected then
+                                local number = tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'items à retirer", "", 10))
+                                if number ~= nil and type(number) == "number" and number >= 1 and number <= itemInfo.count then
+                                    number = math.floor(number)
+                                    TriggerServerEvent(("%s:TakeItems"):format(Config_Vehicle_Inventory.eventName), plate, itemName, number)
+                                else
+                                    _ClientUtils.Notify("~r~La somme est inexact.")
+                                end
+                            end
+                        end)
+                    end
+                    if countItems == 0 then
+                        RageUI.Separator("")
+                        RageUI.Separator("~r~Aucun Item")
+                        RageUI.Separator("")
+                    end
+
+                    RageUI.Separator("↓ ~b~Vos Armes~s~ ↓")
+                    local countWeapons = 0
+                    for _, weaponInfo in pairs(vehicle.weapons) do
+                        countWeapons = countWeapons + 1
+                        RageUI.ButtonWithStyle(("[~r~%d~s~] - %s (~o~%d~s~)"):format(weaponInfo.count, weaponInfo.label, weaponInfo.ammo or 0), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
+                            if Selected then
+                                Weapon.Selected = {label = weaponInfo.label, name = weaponInfo.name, ammo = weaponInfo.ammo}
+                            end
+                        end, RMenu:Get('vehicle_inventory', "vehicle_inventory_weapon"))
+                    end
+                    if countWeapons == 0 then
+                        RageUI.Separator("")
+                        RageUI.Separator("~r~Aucune Arme")
+                        RageUI.Separator("")
+                    end
+                else
                     RageUI.Separator("")
-                    RageUI.Separator("~r~Aucune Arme")
+                    RageUI.Separator("~r~Coffre Vide")
                     RageUI.Separator("")
                 end
             end)
@@ -138,20 +147,22 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
             RageUI.IsVisible(RMenu:Get('vehicle_inventory', "player_inventory"), true, true, true, function()
                 CheckMenu()
                 RageUI.Separator("↓ ~b~Liquide~s~ ↓")
-                RageUI.ButtonWithStyle(("Argent liquide : ~y~ %s"):format(playerInventory.cash), nil, {RightLabel = "→"}, playerInventory.cash > 0 and true or false, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle(("Argent liquide : ~y~ %s"):format(playerInventory.cash), nil, {RightLabel = "→"},  playerInventory.cash ~= 0, function(Hovered, Active, Selected)
                     if Selected then
-                        local amount = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10)))
-                        if amount ~= nil and amount > 0 and amount <= playerInventory.cash then
+                        local amount = tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10))
+                        if amount ~= nil and type(amount) == "number" and amount >= 1 and amount <= playerInventory.cash then
+                            amount = math.floor(amount)
                             TriggerServerEvent(("%s:depositCash"):format(Config_Vehicle_Inventory.eventName), plate, amount)
                         else
                             _ClientUtils.Notify("~r~La somme est inexact.")
                         end
                     end
                 end)
-                RageUI.ButtonWithStyle(("Source inconnue : ~m~ %s"):format(playerInventory.dirty_money), nil, {RightLabel = "→"}, playerInventory.dirty_money > 0 and true or false, function(Hovered, Active, Selected)
+                RageUI.ButtonWithStyle(("Source inconnue : ~m~ %s"):format(playerInventory.dirty_money), nil, {RightLabel = "→"},  playerInventory.dirty_money ~= 0, function(Hovered, Active, Selected)
                     if Selected then
-                        local amount = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10)))
-                        if amount ~= nil and amount > 0 and amount <= playerInventory.dirty_money then
+                        local amount = tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'argent à retirer", "", 10))
+                        if amount ~= nil and type(amount) == "number" and amount >= 1 and amount <= playerInventory.dirty_money then
+                            amount = math.floor(amount)
                             TriggerServerEvent(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.eventName), plate, amount)
                         else
                             _ClientUtils.Notify("~r~La somme est inexact.")
@@ -165,8 +176,9 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
                     if itemInfo.count > 0 then
                         RageUI.ButtonWithStyle(("[~b~%d~s~] - %s"):format(itemInfo.count, itemInfo.label), nil, {RightLabel = "→"}, true, function(Hovered, Active, Selected)
                             if Selected then
-                                local number = math.floor(tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'items à retirer", "", 10)))
-                                if number ~= nil and number > 0 and number <= itemInfo.count then
+                                local number = tonumber(_ClientUtils.Keyboard("liquide", "~b~Nombre d'items à retirer", "", 10))
+                                if number ~= nil and type(number) == "number" and number >= 1 and number <= itemInfo.count then
+                                    number = math.floor(number)
                                     TriggerServerEvent(("%s:depositItems"):format(Config_Vehicle_Inventory.eventName), plate, itemName, number)
                                 else
                                     _ClientUtils.Notify("~r~La somme est inexact.")
