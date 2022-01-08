@@ -1,1 +1,1 @@
-ALTER TABLE `owned_vehicles` ADD `inventory` text NOT NULL DEFAULT '[]' AFTER `vehicle`;
+ALTER TABLE `owned_vehicles` ADD `inventory` text NULL AFTER `vehicle`;

@@ -39,13 +39,13 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
         return
     end
     if not vehicle then
-        local data = MySQL.Sync.fetchAll("SELECT inventory FROM owned_vehicles WHERE plate = @plate", {
+        local data = MySQL.Sync.fetchAll("SELECT inventory, owner FROM owned_vehicles WHERE plate = @plate", {
             ['@plate'] = plate
         })
         if data[1] == nil then
             TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), source, plate, playerInventory, _VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = false }))
         else
-            if data[1].inventory == "[]" then
+            if data[1].inventory == nil then
                 TriggerClientEvent(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), source, plate, playerInventory, _VehicleInventory.registerVehicle(plate, {class = tonumber(info.class), model = tostring(info.model), save = true }))
             else
                 local dataVehicle = json.decode(data[1].inventory)
