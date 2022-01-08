@@ -64,7 +64,6 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
 
             RageUI.IsVisible(RMenu:Get('vehicle_inventory', "vehicle_inventory"), true, true, true, function()
                 CheckMenu()
-                if vehicle.money.cash ~= 0 or vehicle.money.dirty_money ~= 0 or vehicle.items ~= {} or vehicle.weapons ~= {} then
                     RageUI.Separator("↓ ~b~Liquide~s~ ↓")
                     RageUI.ButtonWithStyle(("Argent liquide : ~y~ %s"):format(vehicle.money.cash), nil, {RightLabel = "→"}, vehicle.money.cash ~= 0, function(Hovered, Active, Selected)
                         if Selected then
@@ -125,11 +124,6 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
                         RageUI.Separator("~r~Aucune Arme")
                         RageUI.Separator("")
                     end
-                else
-                    RageUI.Separator("")
-                    RageUI.Separator("~r~Coffre Vide")
-                    RageUI.Separator("")
-                end
             end)
             RageUI.IsVisible(RMenu:Get('vehicle_inventory', "vehicle_inventory_weapon"), true, true, true, function()
                 CheckMenu()
