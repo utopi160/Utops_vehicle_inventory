@@ -12,6 +12,7 @@ Config_Vehicle_Inventory = {
     esxGetter = "esx:getSharedObject",
     inventoryKey = "L",
     eventName = "Utops_vehicle_inventory",
+    nameTable = "owned_vehicles",
     distanceAction = 3.0,
     use3dme = false, -- or true
     Menus = {
