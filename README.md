@@ -3,9 +3,10 @@
 # Présentation :
 Cette ressource est un système de coffre de véhicule. <br />
 Vous pouvez stocker vos items, vos armes et votre argent. <br />
-Il est doté d’un système de logs discord, le webhook est facilement modifiable dans le server > logsManagers.lua et les messages dans le server > generic.lua. <br />
+Elle est dotée d’un système de logs discord, le webhook est facilement modifiable dans le server > logsManagers.lua et les messages dans le server > generic.lua. <br />
 Sa consommation menu fermé est de 0.0 ms. <br />
-Il possède aussi une “librairie” qui vous permet de créer et d’insérer des items dans le coffre très facilement ! <br />
+La touche par défaut est L, elle peut facilement être changé dans le config ou bien dans les paramètres de GTA. <br />
+Elle possède aussi une “librairie” qui vous permet de créer et d’insérer des items dans le coffre très facilement ! <br />
 
 # Installation : 
 <li> 1 - Cloner la ressource en zip
