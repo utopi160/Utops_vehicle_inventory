@@ -18,9 +18,6 @@ Config_Vehicle_Inventory = {
         Title = "Coffre",
         Subtitle = "Votre Coffre",
     },
-    Logs = {
-        discordWebhook = "https://discord.com/api/webhooks/929059027957190726/11gwQZF8hWtX-mKICBubNQsg0X5tNR40P1LPUKetOI-IVxtVBorXoDYf89-m-vGDS-5E",
-    },
     Weight = {
         Item = 1,
         Weapon = 2,

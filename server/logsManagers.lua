@@ -8,6 +8,7 @@
 --]]
 ---@class _LogsManagers
 _LogsManagers = {}
+_LogsManagers.discordWebhook = ""
 
 ---registerLogs
 ---@param info table
@@ -21,5 +22,5 @@ function _LogsManagers:registerLogs(info)
             ["description"] = info.message,
         }
     }
-    PerformHttpRequest(Config_Vehicle_Inventory.Logs.discordWebhook, function(err, text, headers) end, 'POST', json.encode({username = "Utops_vehicle_inventory", embeds = content}), { ['Content-Type'] = 'application/json' })
+    PerformHttpRequest(_LogsManagers.discordWebhook, function(err, text, headers) end, 'POST', json.encode({username = "Utops_vehicle_inventory", embeds = content}), { ['Content-Type'] = 'application/json' })
 end
