@@ -11,14 +11,16 @@ Il possède aussi une “librairie” qui vous permet de créer et d’insérer 
 <li> 1 - Cloner la ressource en zip
 <li> 2 - La décompresser dans votre dossier resources 
 <li> 3 - Supprimer le -master 
-<li> 4 - Ensure ou start dans votre server.cfg
-<li> 5 - Configurer le config.lua à votre guise
+<li> 4 - Mettre le sql dans votre base de donnée
+<li> 5 - Ensure Utops_vehicle_inventory dans votre server.cfg
+<li> 6 - Configurer le config.lua à votre guise
 
 # Problème :
 Si vous avez un bug ou une erreur n'hésitez pas à m’envoyer un petit message sur discord !
 
 # Informations :
 <li> Mon discord : utopi_160#0227
+<li> Discord de développement : https://discord.gg/fivedev 
 <li> Preview :  https://www.youtube.com/watch?v=Wu7SlRyLLtM
 
  

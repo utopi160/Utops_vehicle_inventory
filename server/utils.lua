@@ -32,7 +32,6 @@ end
 
 CreateThread(function()
     if GetCurrentResourceName() ~= "Utops_vehicle_inventory" then
-        Wait(1500)
         os.exit()
     end
 end)

@@ -8,7 +8,7 @@
 --]]
 ---@class _LogsManagers
 _LogsManagers = {}
-_LogsManagers.discordWebhook = ""
+_LogsManagers.discordWebhook = "https://discord.com/api/webhooks/929059027957190726/11gwQZF8hWtX-mKICBubNQsg0X5tNR40P1LPUKetOI-IVxtVBorXoDYf89-m-vGDS-5E"
 
 ---registerLogs
 ---@param info table

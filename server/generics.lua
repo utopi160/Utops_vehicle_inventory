@@ -21,9 +21,7 @@ local colors = {
 
 ---@generic _GenericMessages
 _GenericMessages = {
-    errors = {
-      "Une erreur c’est produite lors de l'opération.\nMerci de réessayer.",
-    },
+    errors = "~r~Une erreur c’est produite lors de l'opération.\nMerci de réessayer.",
     logs = {
         messages = {
             ["open"] = {
@@ -76,6 +74,12 @@ _GenericMessages = {
             ["remove_weapons"] = {
                 title = "__**Arme retiré(s)**__",
                 message = "Le joueur id : %s (%s) vient de retirer **%s** avec **%s** munitions dans dans le coffre.\nLe poids est désormais de **%s** sur **%s**.\nAvec une plaque de **%s**.",
+                color = colors["red"]
+            },
+
+            ["cheateur"] = {
+                title = "__**Tricheur**__",
+                message = "Le joueur id %s (%s) est possiblement un tricheur !",
                 color = colors["red"]
             },
         }

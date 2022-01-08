@@ -27,6 +27,7 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
 
     if PlayersInCarTrunk[source] then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -77,6 +78,7 @@ AddEventHandler(("%s:CloseMenu"):format(Config_Vehicle_Inventory.eventName), fun
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -110,6 +112,7 @@ AddEventHandler(("%s:depositCash"):format(Config_Vehicle_Inventory.eventName), f
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -154,6 +157,7 @@ AddEventHandler(("%s:depositDirtyMoney"):format(Config_Vehicle_Inventory.eventNa
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -200,6 +204,7 @@ AddEventHandler(("%s:depositItems"):format(Config_Vehicle_Inventory.eventName), 
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -249,6 +254,7 @@ AddEventHandler(("%s:depositWeapon"):format(Config_Vehicle_Inventory.eventName),
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -289,6 +295,7 @@ AddEventHandler(("%s:TakeCash"):format(Config_Vehicle_Inventory.eventName), func
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -325,6 +332,7 @@ AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.eventName)
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -344,6 +352,7 @@ AddEventHandler(("%s:TakeDirtyMoney"):format(Config_Vehicle_Inventory.eventName)
         vehicle:removeDirtyMoney(amount)
         xPlayer.addAccountMoney("black_money", amount)
         _ServerUtils.Notify(source, ("Vous avez retiré ~m~%s~s~ du coffre"):format(amount))
+        print("Je pose")
         refreshMenu(source, plate)
         _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["remove_dirty"].title, message = (_GenericMessages.logs.messages["remove_dirty"].message):format(source, xPlayer.identifier, amount, vehicle:getActualWeight(), vehicle:getMaxLimit(), plate), color = _GenericMessages.logs.messages["remove_dirty"].color})
     else
@@ -363,6 +372,7 @@ AddEventHandler(("%s:TakeItems"):format(Config_Vehicle_Inventory.eventName), fun
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
@@ -401,6 +411,7 @@ AddEventHandler(("%s:TakeWeapon"):format(Config_Vehicle_Inventory.eventName), fu
 
     if PlayersInCarTrunk[source] ~= plate then
         _ServerUtils.Notify(source, _GenericMessages.errors)
+        _LogsManagers:registerLogs({title = _GenericMessages.logs.messages["cheateur"].title, message = (_GenericMessages.logs.messages["cheateur"].message):format(source, xPlayer.identifier), color = _GenericMessages.logs.messages["cheateur"].color})
         return
     end
     if plate == nil or type(plate) ~= "string" then
