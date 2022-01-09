@@ -15,8 +15,14 @@ _ServerUtils = {}
 function _ServerUtils.formatInventory(id)
     local xPlayer = ESX.GetPlayerFromId(id)
     local inventory = {}
-    for _, itemInfo in pairs(xPlayer.getInventory(true)) do
-        inventory[itemInfo.name] = itemInfo
+    for k, v in pairs(xPlayer.getInventory(true)) do
+        if type(k) == "string" and type(v) == "number" then
+            -- ESX legacy
+            inventory[k] = {label = ESX.GetItemLabel(k), count = v}
+        else
+            -- Basic ESX
+            inventory[v.name] = v
+        end
     end
     return inventory
 end
