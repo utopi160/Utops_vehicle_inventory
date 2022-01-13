@@ -42,7 +42,7 @@ setmetatable(_VehicleInventory, {
 ---@return boolean
 function _VehicleInventory:verifyInventory()
     local class = Config_Vehicle_Inventory.Limit[self.class]
-    local limitCustom = Config_Vehicle_Inventory.Limit.Custom[self.class]
+    local limitCustom = Config_Vehicle_Inventory.Limit.Custom[GetHashKey(self.model)]
 
     if not limitCustom then
         if self.limit ~= class then

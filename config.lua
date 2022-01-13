@@ -29,7 +29,7 @@ Config_Vehicle_Inventory = {
     },
     Limit = {
         Custom = {
-            --[GetHashKey("BLISTA")] = 10,
+            [GetHashKey("CYCLONE")] = 10,
         },
         [0] = 50,       --Compact
         [1] = 40,       --Sedan
