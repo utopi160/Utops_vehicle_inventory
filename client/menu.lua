@@ -26,10 +26,11 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
     local function getActualWeight()
         local weight = 0
         for _, item in pairs(vehicle.items) do
-            weight = item.count * Config_Vehicle_Inventory.Weight.Item
+            print("Je suis la")
+            weight = weight + item.count * Config_Vehicle_Inventory.Weight.Item
         end
         for _, weapon in pairs(vehicle.weapons) do
-            weight = weapon.count * Config_Vehicle_Inventory.Weight.Weapon
+            weight = weight + weapon.count * Config_Vehicle_Inventory.Weight.Weapon
         end
         weight = weight + (vehicle.money.cash / Config_Vehicle_Inventory.Weight.Money)
         weight = weight + (vehicle.money.dirty_money / Config_Vehicle_Inventory.Weight.Money)
