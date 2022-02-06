@@ -26,7 +26,6 @@ AddEventHandler(("%s:OpenMenu"):format(Config_Vehicle_Inventory.eventName), func
     local function getActualWeight()
         local weight = 0
         for _, item in pairs(vehicle.items) do
-            print("Je suis la")
             weight = weight + item.count * Config_Vehicle_Inventory.Weight.Item
         end
         for _, weapon in pairs(vehicle.weapons) do
