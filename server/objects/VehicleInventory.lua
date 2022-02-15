@@ -187,13 +187,14 @@ function _VehicleInventory:getActualWeight()
     local weight = 0
 
     for _, item in pairs(self.items) do
-        weight = item.count * Config_Vehicle_Inventory.Weight.Item
+        weight = weight + item.count * Config_Vehicle_Inventory.Weight.Item
     end
     for _, weapon in pairs(self.weapons) do
-        weight = weapon.count * Config_Vehicle_Inventory.Weight.Weapon
+        weight = weight + weapon.count * Config_Vehicle_Inventory.Weight.Weapon
     end
     weight = weight + (self.money.cash / Config_Vehicle_Inventory.Weight.Money)
     weight = weight + (self.money.dirty_money / Config_Vehicle_Inventory.Weight.Money)
+    print(weight)
     return weight
 end
 
