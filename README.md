@@ -19,6 +19,9 @@ Elle possède aussi une “librairie” qui vous permet de créer et d’insére
 # Problème :
 Si vous avez un bug ou une erreur n'hésitez pas à m’envoyer un petit message sur discord !
 
+ # Notes
+ Voue ne pouvez pas renommer la ressource !
+ 
 # Informations :
 <li> Mon discord : utopi_160#0227
 <li> Discord de développement : https://discord.gg/fivedev 
